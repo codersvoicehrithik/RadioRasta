@@ -1,0 +1,2 @@
+import { siteConfig } from "@/lib/site-config";
+export function CodersvoiceSignature() { const content = <><span className="cv-mark" aria-hidden="true">&lt;/&gt;</span><span><b>{siteConfig.brand.companyName}</b><small>Made with curiosity</small></span></>; return siteConfig.brand.companyUrl ? <a className="codersvoice-signature" href={siteConfig.brand.companyUrl} target="_blank" rel="noreferrer" aria-label={`Built by ${siteConfig.brand.companyName}`}>{content}</a> : <span className="codersvoice-signature" title={`Built by ${siteConfig.brand.companyName}`}>{content}</span>; }

@@ -1,0 +1,6 @@
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { CodersvoiceSignature } from "@/components/brand/codersvoice-signature";
+import { RadioRastaLogo } from "@/components/brand/radiorasta-logo";
+import { siteConfig } from "@/lib/site-config";
+export function SiteFooter() { return <footer className="site-footer"><div className="footer-route" aria-hidden="true"><i/><i/><i/><i/></div><div className="footer-main"><div className="footer-story"><RadioRastaLogo inverse/><p className="footer-hindi">रास्ता खत्म नहीं होता.<br/>बस अगला गाना शुरू होता है.</p><p>{siteConfig.brand.productTagline}</p><CodersvoiceSignature /></div><nav aria-label="Footer navigation"><div><b>Wander</b><Link href="/discover">All worlds <ArrowUpRight size={13}/></Link><Link href="/journeys">Journeys <ArrowUpRight size={13}/></Link><Link href="/search">Find a song <ArrowUpRight size={13}/></Link></div><div><b>Keep close</b><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><Link href="/login">Optional account</Link></div></nav></div><small className="footer-meta">© {new Date().getFullYear()} {siteConfig.brand.companyName}. A small universe for large feelings.</small></footer>; }

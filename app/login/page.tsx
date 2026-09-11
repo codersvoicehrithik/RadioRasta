@@ -1,0 +1,2 @@
+import { siteConfig } from "@/lib/site-config";
+export default function LoginPage() { return <main className="standard-page empty-page"><p className="eyebrow">{siteConfig.productName} account</p><h1>Authentication is being connected.</h1><p className="lede">Better Auth is part of the project foundation; the production sign-in flow will be enabled after database configuration.</p><p className="product-byline">{siteConfig.productName} by {siteConfig.companyName}</p></main>; }

@@ -1,0 +1,28 @@
+'Log files:
+D:\cdvs_DEV\Peaksync\.npm-cache\_logs\2026-09-10T10_45_47_672Z-debug-0.log
+
+# npm resolution error report
+
+While resolving: better-auth@1.6.31
+Found: drizzle-orm@0.44.7
+node_modules/drizzle-orm
+  peerOptional drizzle-orm@"^0.45.2" from @better-auth/drizzle-adapter@1.6.31
+  node_modules/better-auth/node_modules/@better-auth/drizzle-adapter
+    @better-auth/drizzle-adapter@"1.6.31" from better-auth@1.6.31
+    node_modules/better-auth
+      better-auth@"^1.4.18" from the root project
+
+Could not resolve dependency:
+peerOptional drizzle-orm@"^0.45.2" from better-auth@1.6.31
+node_modules/better-auth
+  better-auth@"^1.4.18" from the root project
+
+Conflicting peer dependency: drizzle-orm@0.45.2
+node_modules/drizzle-orm
+  peerOptional drizzle-orm@"^0.45.2" from better-auth@1.6.31
+  node_modules/better-auth
+    better-auth@"^1.4.18" from the root project
+
+Fix the upstream dependency conflict, or retry
+this command with --force or --legacy-peer-deps
+to accept an incorrect (and potentially broken) dependency resolution.
