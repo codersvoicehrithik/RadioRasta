@@ -9,8 +9,14 @@ export function playWorldInteractionSound(effect: InteractionEffect) {
   const AudioContextClass = window.AudioContext ?? legacyWindow.webkitAudioContext;
   if (!AudioContextClass) return;
   const context = new AudioContextClass();
+  void context.resume();
   const now = context.currentTime;
-  const note = (frequency: number, start: number, duration: number, type: OscillatorType = "sine", gain = 0.05) => {
+  const master = context.createDynamicsCompressor();
+  master.threshold.value = -18;
+  master.knee.value = 14;
+  master.ratio.value = 8;
+  master.connect(context.destination);
+  const note = (frequency: number, start: number, duration: number, type: OscillatorType = "sine", gain = 0.05, wobble = 0) => {
     const oscillator = context.createOscillator();
     const volume = context.createGain();
     oscillator.type = type;
@@ -18,12 +24,13 @@ export function playWorldInteractionSound(effect: InteractionEffect) {
     volume.gain.setValueAtTime(0.0001, start);
     volume.gain.exponentialRampToValueAtTime(gain, start + 0.015);
     volume.gain.exponentialRampToValueAtTime(0.0001, start + duration);
-    oscillator.connect(volume).connect(context.destination);
+    if (wobble) oscillator.frequency.linearRampToValueAtTime(frequency + wobble, start + duration * .45);
+    oscillator.connect(volume).connect(master);
     oscillator.start(start);
     oscillator.stop(start + duration + 0.03);
   };
 
-  if (effect === "dust") { note(196, now, 0.22, "sawtooth", 0.055); note(247, now + 0.14, 0.25, "sawtooth", 0.05); }
+  if (effect === "dust") { note(104, now, .32, "sawtooth", .16, 9); note(131, now + .04, .36, "square", .115, 11); note(156, now + .08, .29, "sawtooth", .08, 7); note(104, now + .43, .27, "sawtooth", .14, -6); note(131, now + .47, .31, "square", .1, -8); }
   else if (effect === "headlights") { note(92, now, 0.34, "square", 0.045); note(117, now + 0.17, 0.3, "square", 0.04); }
   else if (effect === "whistle") { note(784, now, 0.46, "sine", 0.05); note(988, now + 0.17, 0.35, "sine", 0.04); }
   else if (effect === "bell" || effect === "streetlight") { note(1047, now, 0.48, "sine", 0.06); note(1319, now + 0.04, 0.5, "sine", 0.035); }

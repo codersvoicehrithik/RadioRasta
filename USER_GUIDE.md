@@ -2,7 +2,7 @@
 
 Start at Home or Discover and choose a world. No account is required. Bus Wala offers an optional route-and-passenger memento: create it, or choose Skip and enter immediately. It is never a requirement for listening. A created ticket, and the Skip preference, remain on the current device after refresh; use “Get your ticket” or “View your ticket” inside Bus Wala to revisit it.
 
-Inside a world, use the persistent player to play/pause, change tracks, seek, mute, and save a track. The queue button opens a low-profile drawer with recently played tracks, the current song’s artist/album/genre metadata, upcoming tracks, and a saved shelf for the current world. Saved tracks remain on this device. The volume slider forwards volume changes to a configured YouTube player as well as direct audio.
+Inside a world, use the persistent player to play/pause, change tracks, seek, mute, shuffle, repeat, and save a track. The queue button opens a low-profile drawer with nearby playlist items, the song actually reported by the player, and a saved shelf for the current world. Saved tracks remain on this device. On a configured YouTube playlist, title, channel, duration, progress, playlist position, and queue IDs come directly from YouTube’s official player API; sample metadata is never shown as live music data. The compact mobile player keeps transport, timeline, elapsed/total time, volume, heart, and queue controls available.
 
 World actions are also audible: Bus Wala's horn, doorbells, whistles, bells, and other contextual actions use small browser-generated sounds. They do not download or reuse third-party sound files. A configured YouTube playlist uses YouTube's embedded player controls; RadioRasta does not download, proxy, or extract audio.
 

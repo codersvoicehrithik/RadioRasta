@@ -1,7 +1,7 @@
 export const siteConfig = {
   brand: {
     companyName: "Codersvoice",
-    companyUrl: process.env.NEXT_PUBLIC_CODERSVOICE_URL || undefined,
+    companyUrl: process.env.NEXT_PUBLIC_CODERSVOICE_URL || "https://codersvoice.me",
     companyLogo: undefined,
     productName: "RadioRasta",
     productTagline: "Music for every road, mood & memory.",

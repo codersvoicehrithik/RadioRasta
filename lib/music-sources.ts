@@ -31,3 +31,12 @@ export function getYouTubeEmbedUrl(sourceUrl: string) {
     return undefined;
   }
 }
+
+export function getYouTubePlaylistId(sourceUrl: string) {
+  try {
+    const url = new URL(sourceUrl);
+    return url.searchParams.get("list") ?? undefined;
+  } catch {
+    return undefined;
+  }
+}

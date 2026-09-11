@@ -7,7 +7,7 @@
 5. Run `npm run db:migrate` and `npm run db:seed`.
 6. Run `npm run dev` and visit `http://localhost:3000`.
 
-The seed writes nine published world configurations. Add permitted playlist URLs in `.env` using the documented `NEXT_PUBLIC_RADIORASTA_*_PLAYLIST_URL` variables; they are intentionally public client configuration, never secrets. Tracks remain safe demo metadata until an owned/licensed source is configured.
+The seed writes nine published world configurations. Add permitted playlist URLs in `.env` using the documented `NEXT_PUBLIC_RADIORASTA_*_PLAYLIST_URL` variables; they are intentionally public client configuration, never secrets. For YouTube, use a normal playlist URL containing `list=...`. RadioRasta loads it through the official YouTube IFrame Player API and reads the current video title, channel, duration, position, playlist order, shuffle, and loop state from that player. Do not use an individual video URL when you expect queue controls.
 
 Cloudinary hero delivery IDs and the exact uploaded filenames are documented in `ASSET_CONTRACT.md`. The provided development console diagnostic prints each resolved public delivery URL. Bus Wala's optional memento uses only this browser's local storage (`radiorasta:bus-wala-ticket` and `radiorasta:bus-wala-ticket-skipped`); it does not need a database or account.
 
