@@ -9,6 +9,7 @@ export interface YouTubeSnapshot { title: string; author: string; videoId: strin
 
 interface YouTubePlayer {
   cuePlaylist: (options: { list: string; listType: "playlist"; index?: number }) => void;
+  loadPlaylist: (options: { list: string; listType: "playlist"; index?: number }) => void;
   playVideo: () => void; pauseVideo: () => void; nextVideo: () => void; previousVideo: () => void; playVideoAt: (index: number) => void; seekTo: (seconds: number, allowSeekAhead: boolean) => void;
   setVolume: (volume: number) => void; getVolume: () => number; setShuffle: (shuffle: boolean) => void; setLoop: (loop: boolean) => void;
   getVideoData: () => { title?: string; author?: string; video_id?: string }; getCurrentTime: () => number; getDuration: () => number; getPlaylist: () => string[] | null; getPlaylistIndex: () => number; destroy: () => void;
@@ -17,7 +18,7 @@ interface YouTubeApi { Player: new (element: HTMLElement, options: Record<string
 declare global { interface Window { YT?: YouTubeApi; onYouTubeIframeAPIReady?: () => void; } }
 
 type PlayerCommand = { id: number; action: YouTubeCommand; value?: number | boolean };
-const requiredMethods = ["cuePlaylist", "playVideo", "pauseVideo", "nextVideo", "previousVideo", "playVideoAt", "seekTo", "setVolume", "getVolume", "setShuffle", "setLoop", "getVideoData", "getCurrentTime", "getDuration", "getPlaylist", "getPlaylistIndex", "destroy"];
+const requiredMethods = ["cuePlaylist", "loadPlaylist", "playVideo", "pauseVideo", "nextVideo", "previousVideo", "playVideoAt", "seekTo", "setVolume", "getVolume", "setShuffle", "setLoop", "getVideoData", "getCurrentTime", "getDuration", "getPlaylist", "getPlaylistIndex", "destroy"];
 const finite = (value: number, fallback = 0) => Number.isFinite(value) ? value : fallback;
 const canUsePlayer = (value: unknown): value is YouTubePlayer => Boolean(value) && typeof value === "object" && requiredMethods.every((method) => typeof (value as Record<string, unknown>)[method] === "function");
 const callPlayer = (player: YouTubePlayer, method: keyof YouTubePlayer, ...args: unknown[]) => { const action = (player as unknown as Record<string, unknown>)[method]; if (typeof action !== "function") return false; try { (action as (...values: unknown[]) => unknown).apply(player, args); return true; } catch { return false; } };
@@ -37,9 +38,9 @@ function loadYouTubeApi() {
   return apiPromise;
 }
 
-interface YouTubePlaybackBridgeProps { playlistId: string; command?: PlayerCommand; repeatMode: RepeatMode; onStatus: (status: PlayerStatus) => void; onSnapshot: (snapshot: YouTubeSnapshot) => void; onVolume: (volume: number) => void; onShuffle: (shuffle: boolean) => void; }
+interface YouTubePlaybackBridgeProps { playlistId: string; command?: PlayerCommand; repeatMode: RepeatMode; targetIndex?: number; targetRequestId?: number; onStatus: (status: PlayerStatus) => void; onSnapshot: (snapshot: YouTubeSnapshot) => void; onVolume: (volume: number) => void; onShuffle: (shuffle: boolean) => void; }
 
-export function YouTubePlaybackBridge({ playlistId, command, repeatMode, onStatus, onSnapshot, onVolume, onShuffle }: YouTubePlaybackBridgeProps) {
+export function YouTubePlaybackBridge({ playlistId, command, repeatMode, targetIndex, targetRequestId, onStatus, onSnapshot, onVolume, onShuffle }: YouTubePlaybackBridgeProps) {
   const host = useRef<HTMLDivElement>(null);
   const mountNode = useRef<HTMLDivElement | undefined>(undefined);
   const player = useRef<YouTubePlayer | undefined>(undefined);
@@ -95,7 +96,8 @@ export function YouTubePlaybackBridge({ playlistId, command, repeatMode, onStatu
             if (!mounted) { destroyUnknownPlayer(event.target); return; }
             if (!canUsePlayer(event.target)) { updateStatus("error"); return; }
             player.current = event.target; isReady.current = true; playlist.current = playlistId;
-            callPlayer(event.target, "cuePlaylist", { list: playlistId, listType: "playlist", index: 0 });
+            const initialIndex = typeof targetIndex === "number" ? targetIndex : 0;
+            callPlayer(event.target, typeof targetIndex === "number" ? "loadPlaylist" : "cuePlaylist", { list: playlistId, listType: "playlist", index: initialIndex });
             callPlayer(event.target, "setVolume", 80); callPlayer(event.target, "setLoop", callbacks.current.repeatMode === "all");
             callbacks.current.onVolume(Math.max(0, Math.min(1, finite(event.target.getVolume()) / 100)));
             const queued = pendingCommand.current; if (queued && runCommand(queued)) pendingCommand.current = undefined;
@@ -113,9 +115,10 @@ export function YouTubePlaybackBridge({ playlistId, command, repeatMode, onStatu
       });
     }).catch(() => updateStatus("error"));
     return () => { mounted = false; };
-  }, [playlistId, runCommand, syncCurrentTrack, updateStatus]);
+  }, [playlistId, runCommand, syncCurrentTrack, targetIndex, updateStatus]);
 
-  useEffect(() => { const instance = player.current; if (!isReady.current || !instance || playlist.current === playlistId) return; playlist.current = playlistId; callPlayer(instance, "cuePlaylist", { list: playlistId, listType: "playlist", index: 0 }); callPlayer(instance, "setLoop", repeatMode === "all"); syncCurrentTrack(); }, [playlistId, repeatMode, syncCurrentTrack]);
+  useEffect(() => { const instance = player.current; if (!isReady.current || !instance || playlist.current === playlistId) return; playlist.current = playlistId; callPlayer(instance, typeof targetIndex === "number" ? "loadPlaylist" : "cuePlaylist", { list: playlistId, listType: "playlist", index: targetIndex ?? 0 }); callPlayer(instance, "setLoop", repeatMode === "all"); syncCurrentTrack(); }, [playlistId, repeatMode, syncCurrentTrack, targetIndex]);
+  useEffect(() => { const instance = player.current; if (!targetRequestId || typeof targetIndex !== "number" || !isReady.current || !instance || !canUsePlayer(instance)) return; playlist.current = playlistId; if (callPlayer(instance, "loadPlaylist", { list: playlistId, listType: "playlist", index: targetIndex })) syncCurrentTrack(); }, [playlistId, syncCurrentTrack, targetIndex, targetRequestId]);
   useEffect(() => () => { destroyUnknownPlayer(player.current ?? constructedPlayer.current); const mount = mountNode.current; const root = host.current; if (mount && root && mount.parentNode === root) root.removeChild(mount); player.current = undefined; constructedPlayer.current = undefined; mountNode.current = undefined; isReady.current = false; }, []);
   useEffect(() => { if (playerState !== "playing" && playerState !== "buffering") return; const timer = window.setInterval(syncCurrentTrack, 500); return () => window.clearInterval(timer); }, [playerState, syncCurrentTrack]);
   useEffect(() => { if (command) runCommand(command); }, [command, runCommand]);

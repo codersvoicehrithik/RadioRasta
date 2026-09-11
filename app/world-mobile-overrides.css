@@ -129,11 +129,13 @@
     top: 0;
     right: auto;
     bottom: 0;
-    left: -17.5%;
-    width: 135%;
+    left: 0;
+    /* A real, full-width window pan: 180% leaves enough image to travel from
+       its left edge all the way to its right edge without exposing a gap. */
+    width: 180%;
     overflow: hidden;
     will-change: transform;
-    animation: mobile-world-window 32s ease-in-out infinite;
+    animation: mobile-world-window 34s ease-in-out infinite alternate;
   }
 
   .world-mobile-pan .world-scenery-image {
@@ -143,12 +145,12 @@
     animation: none !important;
   }
 
-  .world-experience.is-playing .world-mobile-pan { animation-duration: 18s; }
+  .world-experience.is-playing .world-mobile-pan { animation-duration: 20s; }
 }
 
 @keyframes mobile-world-window {
-  0%, 100% { transform: translate3d(-6%, 0, 0); }
-  50% { transform: translate3d(6%, 0, 0); }
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-44.45%, 0, 0); }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -6,7 +6,7 @@ RadioRasta, by Codersvoice, is an interactive Indian music universe: listeners c
 
 RadioRasta is anonymous-first: visitors can enter worlds, run rituals, create digital entertainment tickets, save temporary favourites, and retain ticket stubs on the current device without an account. Nine data-driven worlds are included: Bus Wala, Truck Driver, Chai Tapri, Deluxe Saloon, Train Radio, Dhaba Radio, Baarish Wali Khidki, 2AM Rooftop, and Mohalle Wala Pyaar.
 
-Demo tracks deliberately have no audio URL. Configure permitted playlist/source URLs with the nine `NEXT_PUBLIC_RADIORASTA_*_PLAYLIST_URL` variables in `.env`; a YouTube playlist URL must include `list=...` and plays through YouTube’s official IFrame Player API. The visible title, channel, playback time, playlist order, shuffle, and repeat controls are driven by live player state. RadioRasta never downloads, proxies, or extracts copyrighted audio.
+Demo tracks deliberately have no audio URL. Configure permitted playlist/source URLs with the nine `NEXT_PUBLIC_RADIORASTA_*_PLAYLIST_URL` variables in `.env`; a YouTube playlist URL must include `list=...` and plays through YouTube’s official IFrame Player API. Add the server-only `YOUTUBE_API_KEY` to enable verified playlist titles, exact saved-track restoration, and song/artist search through YouTube Data API v3. RadioRasta never downloads, proxies, or extracts copyrighted audio.
 
 ## Stack
 

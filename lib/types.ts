@@ -7,6 +7,8 @@ export type InteractionEffect = "dust" | "headlights" | "steam" | "snip" | "whis
 export interface ThemeConfig { primary: string; secondary: string; accent: string; sky: string; overlay: string; atmosphere: "road" | "steam" | "rain" | "lights" | "stars" | "mohalla" | "train"; }
 export interface RitualConfig { kind: RitualKind; title: string; prompt: string; options?: string[]; arrivalLine?: string; }
 export interface Track { id: string; title: string; artist: string; album: string; duration: number; genre: string; mood: TrackMood; energy: "low" | "medium" | "high"; era: string; language: string; tempo: number; audioUrl?: string; }
+/** Canonical metadata for a YouTube playlist item. Video IDs never appear as UI labels. */
+export interface RadioTrack { videoId: string; title: string; author: string; thumbnail?: string; duration?: number; worldSlug: string; playlistIndex: number; }
 export interface WorldMusicConfig { sourceType: MusicSourceType; sourceUrl?: string; enabled: boolean; playlistLabel: string; allowedMoods: TrackMood[]; }
 export interface WorldVisualConfig { scene: string; assetFolder: string; heroFilename: string; mobileFocus: string; detail: string; }
 export interface World { id: string; slug: string; name: string; hindiName: string; category: WorldCategory; description: string; shortDescription: string; theme: ThemeConfig; ritual: RitualConfig; interaction: { label: string; icon: string; cooldown: number; effect: InteractionEffect }; playlist: Track[]; music: WorldMusicConfig; visual: WorldVisualConfig; journey?: { enabled: boolean; stages: string[] }; }
