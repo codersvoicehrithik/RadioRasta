@@ -1,0 +1,1 @@
+ALTER TABLE "listening_sessions" ADD COLUMN "last_heartbeat_at" timestamp with time zone DEFAULT now() NOT NULL;

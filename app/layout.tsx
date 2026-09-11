@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./world-mobile-overrides.css";
 import { MusicProvider } from "@/components/music/music-provider";
 import { SiteNavigation } from "@/components/site-navigation";
 import { PersistentPlayer } from "@/components/music/persistent-player";

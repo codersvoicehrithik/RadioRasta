@@ -6,7 +6,10 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
   },
-  images: { remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com" }] },
+  images: {
+    remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com" }],
+    qualities: [75, 90],
+  },
 };
 
 export default nextConfig;

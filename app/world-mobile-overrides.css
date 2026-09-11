@@ -1,0 +1,156 @@
+/* A moving, zoomed-out mobile image frame. The viewport travels across the full hero instead of moving the image element itself. */
+.ritual-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #8a705a;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 45%);
+  color: #2b1b16;
+}
+
+.ritual-close:hover { background: #2b1b16; color: #fff; }
+
+.listener-counter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 9px 0 0;
+  color: rgb(255 255 255 / 78%);
+  font: 500 10px var(--mono);
+  letter-spacing: .035em;
+}
+
+.listener-counter i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #68d391;
+  box-shadow: 0 0 0 4px rgb(104 211 145 / 17%);
+  animation: listener-pulse 1.8s ease-in-out infinite;
+}
+
+.magic-hearts i {
+  bottom: 10%;
+  left: var(--particle-left);
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: linear-gradient(135deg, #ff9aaa, #e53f67);
+  box-shadow: 0 0 13px rgb(255 105 141 / 65%);
+  transform: rotate(45deg);
+  animation: heart-float 2.15s cubic-bezier(.2,.7,.25,1) both;
+  animation-delay: var(--particle-delay);
+}
+
+.magic-hearts i::before,
+.magic-hearts i::after {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: inherit;
+  content: "";
+}
+
+.magic-hearts i::before { top: -7px; left: 0; }
+.magic-hearts i::after { top: 0; left: -7px; }
+
+.magic-shooting-stars i {
+  top: var(--particle-top);
+  right: -28%;
+  left: auto;
+  width: 98px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #fff 42%, #cbb1ff 72%, transparent);
+  box-shadow: 0 0 10px 2px rgb(220 198 250 / 82%);
+  transform: rotate(-22deg);
+  animation: shooting-star 1.25s cubic-bezier(.18,.62,.28,1) both;
+  animation-delay: var(--particle-delay);
+}
+
+@keyframes heart-float {
+  0% { opacity: 0; transform: translate(0, 10px) rotate(45deg) scale(.55); }
+  18% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--particle-drift), -47vh) rotate(45deg) scale(1.24); }
+}
+
+@keyframes shooting-star {
+  0% { opacity: 0; transform: translateX(0) rotate(-22deg) scaleX(.18); }
+  12% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(-145vw) rotate(-22deg) scaleX(1); }
+}
+
+@keyframes listener-pulse {
+  50% { transform: scale(.74); box-shadow: 0 0 0 7px rgb(104 211 145 / 0%); }
+}
+
+/* The track is deliberately wider than the viewport. Translating it moves real pixels
+   through the mobile frame, rather than attempting to animate an image crop. */
+.world-mobile-pan { position: absolute; inset: 0; }
+
+@media (max-width: 720px) {
+  .interaction-button {
+    width: 62px !important;
+    height: 62px !important;
+    min-width: 62px;
+    border-width: 3px !important;
+    gap: 1px;
+    font-size: 9px !important;
+    line-height: 1.05;
+  }
+
+  .interaction-button span { font-size: 19px !important; }
+
+  .listener-counter { margin-top: 7px; font-size: 9px; }
+
+  .world-intro { width: 100%; min-width: 0; }
+
+  .now-playing-pill {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .now-playing-pill strong {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .world-mobile-pan {
+    top: 0;
+    right: auto;
+    bottom: 0;
+    left: -17.5%;
+    width: 135%;
+    overflow: hidden;
+    will-change: transform;
+    animation: mobile-world-window 32s ease-in-out infinite;
+  }
+
+  .world-mobile-pan .world-scenery-image {
+    object-fit: cover !important;
+    object-position: var(--hero-mobile-position, 50% 50%) !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .world-experience.is-playing .world-mobile-pan { animation-duration: 18s; }
+}
+
+@keyframes mobile-world-window {
+  0%, 100% { transform: translate3d(-6%, 0, 0); }
+  50% { transform: translate3d(6%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .world-mobile-pan { animation: none !important; }
+}

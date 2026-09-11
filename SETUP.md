@@ -5,6 +5,8 @@
 3. Add the configured Cloudinary cloud name, API key, and API secret. Secrets stay server-side. `next.config.ts` passes only the safe cloud name to client image delivery as `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`; do not expose the key or secret.
 4. Run `npm install`, then `npm run db:generate` to create Drizzle SQL migrations from `db/schema.ts`. Review and commit that output.
 5. Run `npm run db:migrate` and `npm run db:seed`.
+
+The “listening now” counter uses the `listening_sessions` heartbeat table. After pulling new database migrations, run `npm run db:migrate` before starting the app so that presence updates can be recorded.
 6. Run `npm run dev` and visit `http://localhost:3000`.
 
 The seed writes nine published world configurations. Add permitted playlist URLs in `.env` using the documented `NEXT_PUBLIC_RADIORASTA_*_PLAYLIST_URL` variables; they are intentionally public client configuration, never secrets. For YouTube, use a normal playlist URL containing `list=...`. RadioRasta loads it through the official YouTube IFrame Player API and reads the current video title, channel, duration, position, playlist order, shuffle, and loop state from that player. Do not use an individual video URL when you expect queue controls.
